@@ -30,7 +30,7 @@ function ClosingSoonCard({ item, onPress }: { item: CompetitionSummary; onPress:
       <View style={styles.featureTop}>
         {item.judgeAvatarUrl ? <Image source={{ uri: item.judgeAvatarUrl }} style={styles.featureAvatar} /> : null}
         <View style={styles.featureBadge}>
-          <Ionicons name="time-outline" size={12} color={colors.surface} />
+          <Ionicons name="time-outline" size={12} color={colors.primary} />
           <Text style={styles.featureBadgeText}>
             {countdown ? t('closes_in', { time: formatCountdown(countdown) }) : ''}
           </Text>
@@ -54,7 +54,7 @@ function Section({ title, onViewAll, children }: { title: string; onViewAll?: ()
   return (
     <View style={styles.section}>
       <View style={styles.sectionHeader}>
-        <Text style={typography.h2}>{title}</Text>
+        <Text style={typography.eyebrow}>{title}</Text>
         {onViewAll ? (
           <Pressable onPress={onViewAll} accessibilityRole="button" hitSlop={8}>
             <Text style={styles.viewAll}>{t('view_all')}</Text>
@@ -166,17 +166,25 @@ const styles = StyleSheet.create({
   skeleton: { padding: spacing.lg, gap: spacing.md },
   section: { marginTop: spacing.lg },
   sectionHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.lg, marginBottom: spacing.md },
-  viewAll: { color: colors.primary, fontWeight: '600', fontSize: 13 },
+  viewAll: { color: colors.primary, fontWeight: '500', fontSize: 12 },
   list: { paddingHorizontal: spacing.lg, gap: spacing.md },
   featureRow: { paddingHorizontal: spacing.lg, gap: spacing.md },
-  feature: { width: 240, backgroundColor: colors.primary, borderRadius: radius.lg, padding: spacing.lg, gap: spacing.sm },
-  pressed: { opacity: 0.9 },
+  feature: {
+    width: 232,
+    backgroundColor: colors.surface,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.borderStrong,
+    padding: spacing.lg,
+    gap: spacing.sm,
+  },
+  pressed: { backgroundColor: colors.primarySofter },
   featureTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  featureAvatar: { width: 36, height: 36, borderRadius: 18, borderWidth: 2, borderColor: 'rgba(255,255,255,0.5)' },
-  featureBadge: { flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: 'rgba(255,255,255,0.18)', borderRadius: radius.pill, paddingHorizontal: spacing.sm, paddingVertical: 4 },
-  featureBadgeText: { color: colors.surface, fontSize: 11, fontWeight: '600', fontVariant: ['tabular-nums'] },
-  featureTitle: { color: colors.surface, fontSize: 17, fontWeight: '700', marginTop: spacing.xs, minHeight: 48 },
+  featureAvatar: { width: 32, height: 32, borderRadius: 16, backgroundColor: colors.chip },
+  featureBadge: { flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: colors.primarySoft, borderRadius: radius.pill, paddingHorizontal: spacing.sm, paddingVertical: 3 },
+  featureBadgeText: { color: colors.primary, fontSize: 11, fontWeight: '500', fontVariant: ['tabular-nums'] },
+  featureTitle: { color: colors.text, fontSize: 15, fontWeight: '600', marginTop: spacing.xs, minHeight: 44 },
   featureMeta: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  featurePrize: { color: colors.surface, fontSize: 18, fontWeight: '700' },
-  featureSpots: { color: 'rgba(255,255,255,0.85)', fontSize: 12, fontWeight: '600' },
+  featurePrize: { color: colors.primary, fontSize: 16, fontWeight: '600' },
+  featureSpots: { color: colors.textMuted, fontSize: 12, fontWeight: '500' },
 });

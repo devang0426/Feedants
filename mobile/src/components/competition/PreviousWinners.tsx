@@ -1,23 +1,28 @@
 import React from 'react';
 import { FlatList, Image, Linking, Pressable, StyleSheet, View } from 'react-native';
-import { Text } from '../ui/Text';
 import { Ionicons } from '@expo/vector-icons';
 import type { Winner } from '../../api/types';
 import { useLanguage } from '../../i18n';
-import { colors, radius, spacing, typography } from '../../theme';
+import { colors, hairline, radius, spacing, typography } from '../../theme';
 import { Card } from '../ui/Card';
+import { Text } from '../ui/Text';
 
 function WinnerTile({ winner }: { winner: Winner }) {
   const open = () => {
     if (winner.videoUrl) Linking.openURL(winner.videoUrl).catch(() => undefined);
   };
   return (
-    <Pressable onPress={open} style={styles.tile} accessibilityRole="button" accessibilityLabel={`${winner.name}, ${winner.positionLabel}`}>
+    <Pressable
+      onPress={open}
+      style={({ pressed }) => [styles.tile, pressed && styles.pressed]}
+      accessibilityRole="button"
+      accessibilityLabel={`${winner.name}, ${winner.positionLabel}`}
+    >
       <View>
         <Image source={{ uri: winner.imageUrl }} style={styles.image} />
         {winner.videoUrl ? (
           <View style={styles.play}>
-            <Ionicons name="play" size={12} color={colors.surface} />
+            <Ionicons name="play" size={10} color={colors.primary} />
           </View>
         ) : null}
       </View>
@@ -25,7 +30,7 @@ function WinnerTile({ winner }: { winner: Winner }) {
         <Text style={styles.name} numberOfLines={2}>
           {winner.name}
         </Text>
-        <Text style={typography.caption}>{winner.positionLabel}</Text>
+        <Text style={typography.captionMuted}>{winner.positionLabel}</Text>
       </View>
     </Pressable>
   );
@@ -50,34 +55,39 @@ export function PreviousWinners({ winners }: { winners: Winner[] }) {
   );
 }
 
-const IMG = 84;
+const IMG = 72;
 
 const styles = StyleSheet.create({
-  card: { paddingVertical: spacing.lg },
-  title: { paddingHorizontal: spacing.lg, marginBottom: spacing.md },
-  list: { paddingHorizontal: spacing.lg },
+  card: { paddingVertical: spacing.xl },
+  title: { paddingHorizontal: spacing.xl, marginBottom: spacing.md },
+  list: { paddingHorizontal: spacing.xl },
   tile: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.primarySofter,
+    borderWidth: hairline,
+    borderColor: colors.borderStrong,
     borderRadius: radius.md,
-    padding: 4,
+    padding: 6,
     paddingRight: spacing.md,
-    width: 186,
+    width: 180,
+    backgroundColor: colors.surface,
   },
+  pressed: { backgroundColor: colors.primarySofter },
   image: { width: IMG, height: IMG, borderRadius: radius.sm, backgroundColor: colors.chip },
   play: {
     position: 'absolute',
-    right: 6,
-    bottom: 6,
-    width: 22,
-    height: 22,
-    borderRadius: 11,
-    backgroundColor: colors.primary,
+    right: 5,
+    bottom: 5,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: colors.surface,
+    borderWidth: hairline,
+    borderColor: colors.borderStrong,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingLeft: 2,
+    paddingLeft: 1,
   },
   meta: { flex: 1, marginLeft: spacing.md },
-  name: { fontSize: 14, fontWeight: '600', color: colors.text, marginBottom: 2 },
+  name: { fontSize: 13, fontWeight: '500', color: colors.text, marginBottom: 2 },
 });

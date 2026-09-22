@@ -19,7 +19,7 @@ function DateCell({ icon, label, iso, isPast }: DateCellProps) {
   const { lang } = useLanguage();
   return (
     <View style={styles.cell}>
-      <Ionicons name={icon} size={24} color={isPast ? colors.textMuted : colors.primary} />
+      <Ionicons name={icon} size={20} color={isPast ? colors.textMuted : colors.primary} />
       <View style={styles.cellText}>
         <Text style={typography.caption}>{label}</Text>
         <Text style={[styles.date, isPast && styles.past]}>{formatShortDate(iso, lang)}</Text>
@@ -60,8 +60,8 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row' },
   cell: { flex: 1, flexDirection: 'row', alignItems: 'flex-start', padding: spacing.md, gap: spacing.md },
   cellText: { flex: 1 },
-  date: { fontSize: 15, fontWeight: '700', color: colors.primary, marginTop: 2 },
-  time: { fontSize: 14, fontWeight: '600', color: colors.text, marginTop: 2 },
+  date: { fontSize: 14, fontWeight: '600', color: colors.primary, marginTop: 2 },
+  time: { fontSize: 13, fontWeight: '500', color: colors.text, marginTop: 1 },
   past: { color: colors.textMuted },
   vDivider: { width: 1, backgroundColor: colors.border },
   hDivider: { height: 1, backgroundColor: colors.border },

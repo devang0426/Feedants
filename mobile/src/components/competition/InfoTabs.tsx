@@ -90,16 +90,16 @@ export function InfoTabs({ competition }: { competition: CompetitionDetails }) {
 
 const styles = StyleSheet.create({
   tabRow: { flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: colors.border },
-  tab: { flex: 1, alignItems: 'center', paddingBottom: spacing.md, borderBottomWidth: 2, borderBottomColor: 'transparent' },
+  tab: { flex: 1, alignItems: 'center', paddingBottom: spacing.md, borderBottomWidth: 1.5, borderBottomColor: 'transparent', marginBottom: -1 },
   tabActive: { borderBottomColor: colors.primary },
-  tabLabel: { fontSize: 13, fontWeight: '600', color: colors.textSecondary },
-  tabLabelActive: { color: colors.primary },
+  tabLabel: { fontSize: 12.5, fontWeight: '500', color: colors.textMuted },
+  tabLabelActive: { color: colors.primary, fontWeight: '600' },
   content: { paddingTop: spacing.lg },
   about: { ...typography.bodySecondary, lineHeight: 22 },
   more: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing.xs, marginTop: spacing.md },
-  moreText: { color: colors.primary, fontWeight: '600', fontSize: 14 },
+  moreText: { color: colors.primary, fontWeight: '500', fontSize: 13 },
   bullets: { gap: spacing.sm },
   bulletRow: { flexDirection: 'row', gap: spacing.sm },
-  bulletDot: { color: colors.primary, fontSize: 16, lineHeight: 22 },
+  bulletDot: { color: colors.textMuted, fontSize: 14, lineHeight: 22 },
   bulletText: { ...typography.bodySecondary, flex: 1, lineHeight: 22 },
 });

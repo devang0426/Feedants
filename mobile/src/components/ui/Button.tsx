@@ -6,8 +6,8 @@ import {
   type StyleProp,
   type ViewStyle,
 } from 'react-native';
+import { colors, hairline, radius, spacing } from '../../theme';
 import { Text } from './Text';
-import { colors, radius, spacing } from '../../theme';
 
 interface ButtonProps {
   label: string;
@@ -21,6 +21,7 @@ interface ButtonProps {
   accessibilityLabel?: string;
 }
 
+/** Calm button: solid teal for the one primary action, hairline outline otherwise. */
 export function Button({
   label,
   subLabel,
@@ -73,17 +74,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 10,
     paddingHorizontal: spacing.lg,
-    borderRadius: radius.sm,
-    minHeight: 40,
+    borderRadius: radius.md,
+    minHeight: 44,
   },
-  lg: { minHeight: 56, borderRadius: radius.md, paddingVertical: spacing.sm },
+  lg: { minHeight: 52, paddingVertical: spacing.sm },
   primary: { backgroundColor: colors.primary },
   primaryDisabled: { backgroundColor: colors.disabled },
-  outline: { borderWidth: 1.5, borderColor: colors.primary, backgroundColor: colors.surface },
-  dangerOutline: { borderWidth: 1.5, borderColor: colors.danger, backgroundColor: colors.surface },
+  outline: { borderWidth: hairline, borderColor: colors.borderStrong, backgroundColor: colors.surface },
+  dangerOutline: { borderWidth: hairline, borderColor: '#F2CFCC', backgroundColor: colors.surface },
   ghost: { backgroundColor: 'transparent' },
-  pressed: { opacity: 0.85 },
-  label: { fontSize: 14, fontWeight: '700' },
-  labelLg: { fontSize: 16 },
-  subLabel: { fontSize: 12, opacity: 0.9, marginTop: 1 },
+  pressed: { opacity: 0.8 },
+  label: { fontSize: 14, fontWeight: '600' },
+  labelLg: { fontSize: 15 },
+  subLabel: { fontSize: 12, opacity: 0.85, marginTop: 1, fontWeight: '400' },
 });

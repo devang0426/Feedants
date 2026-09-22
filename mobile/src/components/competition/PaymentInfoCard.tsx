@@ -18,7 +18,7 @@ export function PaymentInfoCard({ media }: { media: CompetitionDetails['media'] 
       <View style={styles.row}>
         <Pressable style={styles.left} onPress={() => open(media.prizeMoneyVideoUrl)} accessibilityRole="button">
           <View style={styles.playBox}>
-            <Ionicons name="play" size={22} color={colors.surface} />
+            <Ionicons name="play" size={18} color={colors.primary} />
           </View>
           <View style={styles.leftText}>
             <Text style={styles.question}>{t('how_receive_prize')}</Text>
@@ -46,12 +46,12 @@ export function PaymentInfoCard({ media }: { media: CompetitionDetails['media'] 
 const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center' },
   left: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: spacing.md },
-  playBox: { width: 52, height: 52, borderRadius: radius.md, backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center', paddingLeft: 3 },
+  playBox: { width: 46, height: 46, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.primary, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center', paddingLeft: 2 },
   leftText: { flex: 1 },
-  question: { fontSize: 14, fontWeight: '700', color: colors.text, marginBottom: 2 },
+  question: { fontSize: 13.5, fontWeight: '600', color: colors.text, marginBottom: 2 },
   divider: { width: 1, alignSelf: 'stretch', backgroundColor: colors.border, marginHorizontal: spacing.md },
   right: { flex: 1, gap: spacing.md },
   line: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  lineText: { fontSize: 13, color: colors.text, flex: 1 },
-  provider: { fontWeight: '700', color: colors.primaryDark, fontStyle: 'italic' },
+  lineText: { fontSize: 12.5, color: colors.textSecondary, flex: 1 },
+  provider: { fontWeight: '600', color: colors.primary },
 });

@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Text } from '../ui/Text';
 import { Ionicons } from '@expo/vector-icons';
 import type { Countdown } from '../../api/types';
 import { useLanguage } from '../../i18n';
 import { useCountdown } from '../../hooks/useCountdown';
-import { colors, radius, spacing } from '../../theme';
+import { colors, hairline, radius, spacing, typography } from '../../theme';
 import { formatCountdown } from '../../utils/format';
+import { Text } from '../ui/Text';
 
 const LABEL_KEYS: Record<Countdown['key'], string> = {
   registration_opens: 'registration_opens_in',
@@ -16,6 +16,7 @@ const LABEL_KEYS: Record<Countdown['key'], string> = {
   results_in: 'results_in',
 };
 
+/** Quiet strip: eyebrow label, tabular teal digits, subtle urgency tag. */
 export function CountdownBanner({ countdown }: { countdown: Countdown | null }) {
   const { t } = useLanguage();
   const parts = useCountdown(countdown?.targetAt);
@@ -25,16 +26,18 @@ export function CountdownBanner({ countdown }: { countdown: Countdown | null }) 
 
   return (
     <View style={styles.banner} accessibilityLiveRegion="polite">
-      <Ionicons name="hourglass-outline" size={20} color={colors.primary} />
-      <Text style={styles.label} numberOfLines={1}>
-        {t(LABEL_KEYS[countdown.key])}
-      </Text>
+      <View style={styles.left}>
+        <Ionicons name="hourglass-outline" size={16} color={colors.textMuted} />
+        <Text style={typography.eyebrow} numberOfLines={1}>
+          {t(LABEL_KEYS[countdown.key])}
+        </Text>
+      </View>
       <Text style={styles.time} accessibilityLabel={formatCountdown(parts)}>
         {formatCountdown(parts)}
       </Text>
       {showHurry ? (
         <View style={styles.hurry}>
-          <Ionicons name="stopwatch-outline" size={18} color={colors.primary} />
+          <Ionicons name="flash-outline" size={13} color={colors.warning} />
           <Text style={styles.hurryText}>{t('hurry_up')}</Text>
         </View>
       ) : null}
@@ -46,21 +49,23 @@ const styles = StyleSheet.create({
   banner: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.primarySoft,
+    justifyContent: 'space-between',
+    backgroundColor: colors.primarySofter,
     borderRadius: radius.md,
+    borderWidth: hairline,
+    borderColor: colors.accentGreenBorder,
     paddingHorizontal: spacing.lg,
-    paddingVertical: 14,
+    paddingVertical: spacing.md,
     gap: spacing.md,
   },
-  label: { fontSize: 14, fontWeight: '600', color: colors.text, flexShrink: 1 },
+  left: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, flexShrink: 1 },
   time: {
-    flex: 1,
-    textAlign: 'center',
-    fontSize: 18,
-    fontWeight: '700',
+    fontSize: 17,
+    fontWeight: '600',
     color: colors.primary,
     fontVariant: ['tabular-nums'],
+    letterSpacing: 0.3,
   },
-  hurry: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  hurryText: { fontSize: 14, fontWeight: '700', color: colors.primary },
+  hurry: { flexDirection: 'row', alignItems: 'center', gap: 3 },
+  hurryText: { fontSize: 12, fontWeight: '500', color: colors.warning },
 });

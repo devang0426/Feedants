@@ -64,11 +64,11 @@ export function SummaryCard({ competition }: SummaryCardProps) {
 
       <View style={styles.statsRow}>
         <View style={styles.stat}>
-          <Text style={typography.caption}>{t('prize_pool')}</Text>
+          <Text style={typography.eyebrow}>{t('prize_pool')}</Text>
           <Text style={typography.money}>{formatMoney(competition.prizePoolPaise, competition.currency, lang)}</Text>
         </View>
         <View style={styles.stat}>
-          <Text style={typography.caption}>{t('entry_fee')}</Text>
+          <Text style={typography.eyebrow}>{t('entry_fee')}</Text>
           <Text style={typography.money}>
             {competition.entryFeePaise === 0 ? t('free') : formatMoney(competition.entryFeePaise, competition.currency, lang)}
           </Text>
@@ -102,16 +102,16 @@ const styles = StyleSheet.create({
   title: { flex: 1, marginRight: spacing.sm },
   chipRow: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: spacing.sm, marginTop: spacing.md },
   perk: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, marginLeft: spacing.xs },
-  perkText: { color: colors.primary, fontSize: 14, fontWeight: '500' },
-  statsRow: { flexDirection: 'row', alignItems: 'flex-end', marginTop: spacing.xl, gap: spacing.md },
+  perkText: { color: colors.primary, fontSize: 13, fontWeight: '500' },
+  statsRow: { flexDirection: 'row', alignItems: 'flex-end', marginTop: spacing.xxl, gap: spacing.md },
   stat: { flex: 1 },
   spots: { flex: 1.4 },
   spotsHeader: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  spotsLabel: { color: colors.primary, fontSize: 14, fontWeight: '600', flexShrink: 1 },
+  spotsLabel: { color: colors.primary, fontSize: 13, fontWeight: '500', flexShrink: 1 },
   spotsLow: { color: colors.warning },
   spotsFull: { color: colors.danger },
-  track: { height: 5, borderRadius: 3, backgroundColor: colors.primarySoft, marginTop: spacing.sm, overflow: 'hidden' },
-  fill: { height: '100%', backgroundColor: colors.primary, borderRadius: 3 },
+  track: { height: 3, borderRadius: 2, backgroundColor: colors.border, marginTop: spacing.sm, overflow: 'hidden' },
+  fill: { height: '100%', backgroundColor: colors.primary, borderRadius: 2 },
   fillFull: { backgroundColor: colors.danger },
-  booked: { ...typography.caption, color: colors.primary, marginTop: spacing.sm },
+  booked: { ...typography.captionMuted, marginTop: spacing.sm },
 });

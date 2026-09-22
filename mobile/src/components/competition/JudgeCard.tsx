@@ -26,7 +26,7 @@ export function JudgeCard({ judge }: { judge: Judge }) {
           )}
         </View>
         <View style={styles.info}>
-          <Text style={typography.caption}>{t('judge')}</Text>
+          <Text style={typography.eyebrow}>{t('judge')}</Text>
           <Text style={styles.name}>{judge.name}</Text>
           <Text style={typography.bodySecondary}>{judge.title}</Text>
           {judge.experience ? <Text style={typography.bodySecondary}>{judge.experience}</Text> : null}
@@ -49,27 +49,29 @@ const AVATAR = 84;
 const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center' },
   avatarRing: {
-    width: AVATAR + 8,
-    height: AVATAR + 8,
-    borderRadius: (AVATAR + 8) / 2,
-    borderWidth: 2,
-    borderColor: colors.primarySoft,
+    width: AVATAR + 6,
+    height: AVATAR + 6,
+    borderRadius: (AVATAR + 6) / 2,
+    borderWidth: 1,
+    borderColor: colors.borderStrong,
     alignItems: 'center',
     justifyContent: 'center',
   },
   avatar: { width: AVATAR, height: AVATAR, borderRadius: AVATAR / 2, backgroundColor: colors.chip },
   avatarFallback: { alignItems: 'center', justifyContent: 'center' },
   info: { flex: 1, marginLeft: spacing.lg },
-  name: { fontSize: 18, fontWeight: '700', color: colors.text, marginBottom: 2 },
+  name: { fontSize: 16, fontWeight: '600', color: colors.text, marginBottom: 2 },
   video: { alignItems: 'center', marginLeft: spacing.sm },
   playCircle: {
-    width: 52,
-    height: 52,
+    width: 46,
+    height: 46,
     borderRadius: radius.pill,
-    backgroundColor: colors.primarySoft,
+    borderWidth: 1,
+    borderColor: colors.primary,
+    backgroundColor: colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingLeft: 3,
+    paddingLeft: 2,
   },
-  videoLabel: { ...typography.caption, marginTop: spacing.sm },
+  videoLabel: { ...typography.captionMuted, marginTop: spacing.sm },
 });

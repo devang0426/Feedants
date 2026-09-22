@@ -78,6 +78,14 @@ Repo: https://github.com/devang0426/Feedants
 - This tracker file.
 - Fixed: Razorpay test keys added to `backend/.env` made the test suite hit the real gateway and reject the mock signature. `vitest.config.js` now pins `MONGODB_URI` and the Razorpay keys to empty so tests never depend on a developer's `.env`.
 
+#### Whole-app redesign: soft & minimal (teal kept)
+- New design tokens in `mobile/src/theme/index.ts`: near-white background, hairline borders instead of shadows, quieter type (600 instead of 700 headings, uppercase eyebrow labels), softer teal tints, larger card padding.
+- Primitives restyled: `Card` (flat, hairline), `Chip` (tinted pill with hairline), `Button` (slim, outline uses hairline), `SectionTitle` (eyebrow option), `Toast` (no shadow).
+- Components restyled: header (brand wordmark + quiet segmented toggle), tab bar (outline icons, ring "+" button), countdown strip, rewards (hairline rows, no zebra), winners tiles, judge card (outlined play), payment info, disclaimer, dates grid, action bar (no elevation).
+- Screens restyled: Home feature cards are white with teal countdown badge; Explore search is a soft field with tinted filter chips; Sign-in uses underline inputs and an outlined logo; Profile toggle and referral box are hairline.
+- Competition Details keeps its reference layout and content order; only the styling tokens changed, so it still maps to the PNG.
+- Verification: `tsc` clean, Android bundle exported.
+
 ---
 
 ## Verification log

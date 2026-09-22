@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center' },
   icon: { marginRight: spacing.md },
   body: { flex: 1 },
-  title: { fontSize: 16, fontWeight: '700', color: colors.text, marginBottom: spacing.sm },
+  title: { fontSize: 15, fontWeight: '600', color: colors.text, marginBottom: spacing.sm },
   linkRow: {
     flexDirection: 'row',
     alignItems: 'center',

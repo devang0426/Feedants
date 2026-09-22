@@ -252,6 +252,7 @@ The app also prints this card inside the checkout sheet whenever a test key (`rz
 - **Reservation TTL** – prevents abandoned checkouts from blocking spots, and prevents overselling while a user is on the payment sheet.
 - **View-model endpoint** – the screen needs one request; mutations return the same shape so the client has no merging logic.
 - **TanStack Query** for caching/polling/focus refetch; **React Navigation** with deep links (`feedants://competitions/<slug>`); **Expo** for zero-native-setup runs.
+- **Design system**: a soft, minimal token set in `mobile/src/theme` (brand teal kept, near-white surfaces, hairline borders instead of elevation, calm 500/600 type weights, uppercase eyebrow labels). Every component reads from the tokens, so the look is changed in one file. The Competition Details screen keeps the reference layout and content order.
 - **UI/UX details**: the design typeface (Poppins) via a `Text` wrapper that maps `fontWeight` to font faces; a layout-matching skeleton while loading; non-blocking toasts with haptic feedback for success/error; a "could not refresh" banner that keeps the last good data visible when the network drops; a live "spot held mm:ss" chip while a paid reservation is pending; and a red "All spots booked" chip when full.
 - **Zod validation at the edge**, consistent error envelope with machine codes, Helmet/CORS/rate-limiting keyed by user, structured Pino logs, graceful shutdown.
 - **Localised content in the database** (`{en, hi}`) resolved per request, UI chrome localised in the app.

@@ -38,7 +38,7 @@ export function AdPlaceholder() {
 const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: spacing.lg, paddingVertical: spacing.md, gap: spacing.md },
   text: { flex: 1 },
-  title: { fontSize: 15, fontWeight: '700', color: colors.text },
+  title: { fontSize: 14, fontWeight: '600', color: colors.text },
   ad: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     borderColor: colors.borderStrong,
     borderRadius: radius.md,
     paddingVertical: spacing.md,
-    backgroundColor: colors.surface,
+    backgroundColor: 'transparent',
   },
-  adText: { ...typography.captionMuted, fontWeight: '600' },
+  adText: { ...typography.captionMuted, fontWeight: '500' },
 });

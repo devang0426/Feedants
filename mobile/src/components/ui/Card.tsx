@@ -1,27 +1,19 @@
 import React from 'react';
 import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
-import { colors, radius, shadow, spacing } from '../../theme';
+import { colors, hairline, radius, spacing } from '../../theme';
 
 interface CardProps {
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;
   padded?: boolean;
+  /** `surface` = white with hairline; `primarySoft` / `green` = quiet teal tint. */
   tone?: 'surface' | 'primarySoft' | 'green';
 }
 
+/** Flat card: hairline border, no elevation. */
 export function Card({ children, style, padded = true, tone = 'surface' }: CardProps) {
   return (
-    <View
-      style={[
-        styles.card,
-        tone === 'primarySoft' && styles.primarySoft,
-        tone === 'green' && styles.green,
-        padded && styles.padded,
-        style,
-      ]}
-    >
-      {children}
-    </View>
+    <View style={[styles.card, tone !== 'surface' && styles.tint, padded && styles.padded, style]}>{children}</View>
   );
 }
 
@@ -29,11 +21,9 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.surface,
     borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
-    ...shadow.card,
+    borderWidth: hairline,
+    borderColor: colors.borderStrong,
   },
-  padded: { padding: spacing.lg },
-  primarySoft: { backgroundColor: colors.primarySoft, borderColor: colors.primarySoft },
-  green: { backgroundColor: colors.accentGreen, borderColor: colors.accentGreenBorder },
+  padded: { padding: spacing.xl },
+  tint: { backgroundColor: colors.primarySofter, borderColor: colors.accentGreenBorder },
 });

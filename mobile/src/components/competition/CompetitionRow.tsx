@@ -80,13 +80,13 @@ export function CompetitionRow({ item, onPress, trailing }: CompetitionRowProps)
 
 const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', padding: spacing.md, gap: spacing.md },
-  pressed: { opacity: 0.85, transform: [{ scale: 0.99 }] },
-  avatar: { width: 52, height: 52, borderRadius: radius.md, backgroundColor: colors.chip },
-  avatarFallback: { alignItems: 'center', justifyContent: 'center', backgroundColor: colors.primarySoft },
+  pressed: { opacity: 0.85 },
+  avatar: { width: 48, height: 48, borderRadius: 24, backgroundColor: colors.chip },
+  avatarFallback: { alignItems: 'center', justifyContent: 'center', backgroundColor: colors.primarySofter },
   body: { flex: 1, gap: 2 },
-  title: { fontSize: 15, fontWeight: '700', color: colors.text },
+  title: { fontSize: 14.5, fontWeight: '600', color: colors.text },
   meta: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginTop: spacing.xs },
-  full: { color: colors.danger, fontWeight: '600' },
+  full: { color: colors.danger, fontWeight: '500' },
   right: { alignItems: 'flex-end', gap: 2 },
-  fee: { fontSize: 15, fontWeight: '700', color: colors.primary },
+  fee: { fontSize: 14, fontWeight: '600', color: colors.primary },
 });

@@ -1,10 +1,10 @@
 import React from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
-import { Text } from '../ui/Text';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLanguage } from '../../i18n';
-import { colors, spacing } from '../../theme';
+import { colors, hairline, spacing } from '../../theme';
+import { Text } from '../ui/Text';
 
 type TabKey = 'home' | 'explore' | 'create' | 'competitions' | 'profile';
 
@@ -14,32 +14,29 @@ interface BottomTabBarProps {
   onPress?: (tab: TabKey) => void;
 }
 
-/**
- * Visual bottom navigation matching the reference. Only the Competitions
- * tab is wired in this module; the others are placeholders.
- */
+/** Minimal tab bar: hairline top, outline icons, filled icon + teal label when active. */
 export function BottomTabBar({ active, avatarUrl, onPress }: BottomTabBarProps) {
   const { t } = useLanguage();
   const insets = useSafeAreaInsets();
 
-  const items: { key: TabKey; label: string; icon: keyof typeof Ionicons.glyphMap }[] = [
-    { key: 'home', label: t('home'), icon: 'home-outline' },
-    { key: 'explore', label: t('explore'), icon: 'search-outline' },
-    { key: 'create', label: '', icon: 'add' },
-    { key: 'competitions', label: t('competitions'), icon: 'trophy-outline' },
-    { key: 'profile', label: t('profile'), icon: 'person-circle-outline' },
+  const items: { key: TabKey; label: string; icon: keyof typeof Ionicons.glyphMap; activeIcon: keyof typeof Ionicons.glyphMap }[] = [
+    { key: 'home', label: t('home'), icon: 'home-outline', activeIcon: 'home' },
+    { key: 'explore', label: t('explore'), icon: 'search-outline', activeIcon: 'search' },
+    { key: 'create', label: '', icon: 'add', activeIcon: 'add' },
+    { key: 'competitions', label: t('competitions'), icon: 'trophy-outline', activeIcon: 'trophy' },
+    { key: 'profile', label: t('profile'), icon: 'person-outline', activeIcon: 'person' },
   ];
 
   return (
     <View style={[styles.bar, { paddingBottom: Math.max(insets.bottom, spacing.sm) }]}>
       {items.map((item) => {
         const isActive = item.key === active;
-        const color = isActive ? colors.primary : colors.textSecondary;
+        const color = isActive ? colors.primary : colors.textMuted;
         if (item.key === 'create') {
           return (
             <Pressable key={item.key} onPress={() => onPress?.(item.key)} style={styles.item} accessibilityRole="button" accessibilityLabel="Create">
-              <View style={styles.fab}>
-                <Ionicons name="add" size={26} color={colors.surface} />
+              <View style={[styles.plus, isActive && styles.plusActive]}>
+                <Ionicons name="add" size={22} color={isActive ? colors.surface : colors.primary} />
               </View>
             </Pressable>
           );
@@ -49,7 +46,7 @@ export function BottomTabBar({ active, avatarUrl, onPress }: BottomTabBarProps) 
             {item.key === 'profile' && avatarUrl ? (
               <Image source={{ uri: avatarUrl }} style={[styles.avatar, isActive && styles.avatarActive]} />
             ) : (
-              <Ionicons name={item.icon} size={24} color={color} />
+              <Ionicons name={isActive ? item.activeIcon : item.icon} size={22} color={color} />
             )}
             <Text style={[styles.label, { color }]}>{item.label}</Text>
           </Pressable>
@@ -65,13 +62,24 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'space-around',
     backgroundColor: colors.surface,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
+    borderTopWidth: hairline,
+    borderTopColor: colors.borderStrong,
     paddingTop: spacing.sm,
   },
-  item: { alignItems: 'center', justifyContent: 'center', minWidth: 56 },
-  label: { fontSize: 11, marginTop: 3, fontWeight: '500' },
-  fab: { width: 54, height: 54, borderRadius: 16, backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center', marginBottom: 6 },
-  avatar: { width: 26, height: 26, borderRadius: 13, backgroundColor: colors.chip },
-  avatarActive: { borderWidth: 2, borderColor: colors.primary },
+  item: { alignItems: 'center', justifyContent: 'center', minWidth: 56, paddingTop: 2 },
+  label: { fontSize: 10, marginTop: 4, fontWeight: '500' },
+  plus: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    borderWidth: 1,
+    borderColor: colors.primary,
+    backgroundColor: colors.surface,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 8,
+  },
+  plusActive: { backgroundColor: colors.primary },
+  avatar: { width: 24, height: 24, borderRadius: 12, backgroundColor: colors.chip },
+  avatarActive: { borderWidth: 1.5, borderColor: colors.primary },
 });

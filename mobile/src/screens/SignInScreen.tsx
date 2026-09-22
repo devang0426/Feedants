@@ -52,7 +52,7 @@ export function SignInScreen() {
         <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
           <View style={styles.hero}>
             <View style={styles.logo}>
-              <Ionicons name="trophy" size={34} color={colors.surface} />
+              <Ionicons name="trophy-outline" size={28} color={colors.primary} />
             </View>
             <Text style={styles.brand}>Feedants</Text>
             <Text style={[typography.h1, styles.title]}>{t('sign_in_title')}</Text>
@@ -116,16 +116,16 @@ const styles = StyleSheet.create({
   fill: { flex: 1 },
   content: { padding: spacing.lg, paddingBottom: spacing.xxl * 2 },
   hero: { alignItems: 'center', paddingVertical: spacing.xxl },
-  logo: { width: 72, height: 72, borderRadius: 22, backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center' },
-  brand: { fontSize: 20, fontWeight: '700', color: colors.primary, marginTop: spacing.md, letterSpacing: 0.5 },
+  logo: { width: 64, height: 64, borderRadius: 32, borderWidth: 1, borderColor: colors.primary, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center' },
+  brand: { fontSize: 16, fontWeight: '600', color: colors.primary, marginTop: spacing.md, letterSpacing: 0.4 },
   title: { marginTop: spacing.lg, textAlign: 'center' },
-  body: { marginTop: spacing.sm, textAlign: 'center', lineHeight: 20 },
-  label: { ...typography.caption, marginBottom: spacing.xs, marginTop: spacing.sm },
-  input: { borderWidth: 1, borderColor: colors.borderStrong, borderRadius: radius.sm, paddingHorizontal: spacing.md, paddingVertical: 10, fontSize: 14, color: colors.text },
-  cta: { marginTop: spacing.lg },
+  body: { marginTop: spacing.sm, textAlign: 'center' },
+  label: { ...typography.eyebrow, marginBottom: spacing.xs, marginTop: spacing.md },
+  input: { borderBottomWidth: 1, borderBottomColor: colors.borderStrong, paddingHorizontal: 0, paddingVertical: 10, fontSize: 15, color: colors.text },
+  cta: { marginTop: spacing.xxl },
   hint: { ...typography.captionMuted, marginTop: spacing.xl, marginBottom: spacing.sm, textAlign: 'center' },
   demoRow: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: spacing.sm },
-  demoChip: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border, borderRadius: radius.pill, paddingHorizontal: spacing.md, paddingVertical: 8 },
-  demoChipPressed: { backgroundColor: colors.primarySoft },
-  demoText: { fontSize: 13, fontWeight: '600', color: colors.text },
+  demoChip: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.borderStrong, borderRadius: radius.pill, paddingHorizontal: spacing.md, paddingVertical: 7 },
+  demoChipPressed: { backgroundColor: colors.primarySofter },
+  demoText: { fontSize: 12.5, fontWeight: '500', color: colors.textSecondary },
 });

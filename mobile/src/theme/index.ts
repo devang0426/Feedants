@@ -1,29 +1,35 @@
-/** Design tokens sampled from the Feedants reference screen. */
+import { StyleSheet } from 'react-native';
+
+/**
+ * Soft & minimal design system.
+ * Brand teal is kept; everything else is quieter: near-white surfaces,
+ * hairline borders instead of shadows, calmer type weights, more air.
+ */
 export const colors = {
-  primary: '#0E7C86',
-  primaryDark: '#0B5F66',
-  primarySoft: '#E6F4F5',
-  primarySofter: '#F1F9F9',
-  accentGreen: '#EAF7EE',
-  accentGreenBorder: '#CDEBD6',
-  background: '#F5F7F8',
+  primary: '#0F7B84',
+  primaryDark: '#0B5E65',
+  primarySoft: '#EAF4F5',
+  primarySofter: '#F5F9FA',
+  accentGreen: '#EAF4F5',
+  accentGreenBorder: '#D5E7E9',
+  background: '#FBFCFC',
   surface: '#FFFFFF',
-  border: '#E5EAEC',
-  borderStrong: '#D3DBDE',
-  text: '#0F1F24',
-  textSecondary: '#5B6B71',
-  textMuted: '#8A979C',
-  success: '#0E7C86',
-  danger: '#D14343',
-  dangerSoft: '#FDECEC',
-  warning: '#B7791F',
-  warningSoft: '#FFF6E5',
-  chip: '#F1F4F5',
-  gold: '#F2B01E',
-  silver: '#9AA5AB',
-  bronze: '#D9822B',
-  overlay: 'rgba(15, 31, 36, 0.45)',
-  disabled: '#B9C6CA',
+  border: '#ECEFF1',
+  borderStrong: '#DCE3E6',
+  text: '#16262B',
+  textSecondary: '#5F6E73',
+  textMuted: '#93A0A5',
+  success: '#0F7B84',
+  danger: '#C9463D',
+  dangerSoft: '#FBEDEC',
+  warning: '#A8721B',
+  warningSoft: '#FBF4E6',
+  chip: '#F3F5F6',
+  gold: '#E0A82A',
+  silver: '#A5B0B5',
+  bronze: '#C88144',
+  overlay: 'rgba(22, 38, 43, 0.35)',
+  disabled: '#C5CFD3',
 } as const;
 
 export const spacing = {
@@ -36,11 +42,13 @@ export const spacing = {
 } as const;
 
 export const radius = {
-  sm: 8,
-  md: 12,
-  lg: 16,
+  sm: 10,
+  md: 14,
+  lg: 18,
   pill: 999,
 } as const;
+
+export const hairline = StyleSheet.hairlineWidth;
 
 /**
  * Font faces loaded in App.tsx. If loading fails the names fall back to the
@@ -55,22 +63,25 @@ export const fonts = {
 } as const;
 
 export const typography = {
-  h1: { fontSize: 22, fontWeight: '700' as const, color: colors.text },
-  h2: { fontSize: 16, fontWeight: '700' as const, color: colors.text },
-  h3: { fontSize: 15, fontWeight: '700' as const, color: colors.text },
-  body: { fontSize: 14, color: colors.text },
-  bodySecondary: { fontSize: 14, color: colors.textSecondary },
+  h1: { fontSize: 20, fontWeight: '600' as const, color: colors.text, letterSpacing: -0.2 },
+  h2: { fontSize: 15, fontWeight: '600' as const, color: colors.text },
+  h3: { fontSize: 14, fontWeight: '600' as const, color: colors.text },
+  body: { fontSize: 14, color: colors.text, lineHeight: 21 },
+  bodySecondary: { fontSize: 14, color: colors.textSecondary, lineHeight: 21 },
   caption: { fontSize: 12, color: colors.textSecondary },
   captionMuted: { fontSize: 12, color: colors.textMuted },
-  money: { fontSize: 26, fontWeight: '700' as const, color: colors.primary },
+  /** Small uppercase section label. */
+  eyebrow: {
+    fontSize: 11,
+    fontWeight: '600' as const,
+    color: colors.textMuted,
+    letterSpacing: 0.8,
+    textTransform: 'uppercase' as const,
+  },
+  money: { fontSize: 22, fontWeight: '600' as const, color: colors.primary, letterSpacing: -0.3 },
 } as const;
 
+/** Elevation is not part of this system; kept as a no-op for callers. */
 export const shadow = {
-  card: {
-    shadowColor: '#0F1F24',
-    shadowOpacity: 0.05,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 1,
-  },
+  card: {},
 } as const;

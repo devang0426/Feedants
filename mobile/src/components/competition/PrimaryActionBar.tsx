@@ -56,18 +56,13 @@ export function PrimaryActionBar({ competition, busy, onPrimary, onCancel }: Pri
 
 const styles = StyleSheet.create({
   wrap: {
-    paddingHorizontal: spacing.lg,
+    paddingHorizontal: spacing.xl,
     paddingTop: spacing.sm,
     paddingBottom: spacing.sm,
-    backgroundColor: colors.background,
+    backgroundColor: colors.surface,
     borderTopWidth: 1,
     borderTopColor: colors.border,
-    shadowColor: '#0F1F24',
-    shadowOpacity: 0.06,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: -4 },
-    elevation: 8,
   },
   cancel: { alignSelf: 'center', paddingVertical: 6, marginBottom: 2 },
-  cancelText: { color: colors.danger, fontSize: 13, fontWeight: '600' },
+  cancelText: { color: colors.danger, fontSize: 12.5, fontWeight: '500' },
 });
