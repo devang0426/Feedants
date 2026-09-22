@@ -86,6 +86,12 @@ Repo: https://github.com/devang0426/Feedants
 - Competition Details keeps its reference layout and content order; only the styling tokens changed, so it still maps to the PNG.
 - Verification: `tsc` clean, Android bundle exported.
 
+#### Fix: Razorpay page not opening at payment time
+- Cause 1 (browser preview): `react-native-webview` has no web implementation, so the checkout rendered nothing on `expo start --web`. Added `RazorpayCheckout.web.tsx`, which injects `checkout.js` into the page and opens the Razorpay modal directly; Metro picks it automatically on web.
+- Cause 2 (Android): WebView defaults to multiple-window support, which can block Razorpay's iframe/bank redirects. Native checkout now sets `setSupportMultipleWindows={false}`, `javaScriptCanOpenWindowsAutomatically`, `mixedContentMode="always"`, cookies enabled, and opens checkout from the script's `onload` instead of inline.
+- Added stall detection: if `checkout.js` has not reported in within 10 s (or errors), the sheet shows "The payment page did not load" with a Try again button instead of staying blank.
+- Verification: `tsc` clean; web bundle contains the `.web` variant only; Android bundle exported.
+
 ---
 
 ## Verification log
