@@ -1,0 +1,12 @@
+{
+  "name": "feedants-competition-details",
+  "private": true,
+  "description": "Feedants technical assignment: Competition Details screen as a full-stack module (React Native + Node/Express + MongoDB)",
+  "scripts": {
+    "install:all": "npm --prefix backend install && npm --prefix mobile install",
+    "backend": "npm --prefix backend run dev",
+    "backend:test": "npm --prefix backend test",
+    "mobile": "npm --prefix mobile start",
+    "mobile:typecheck": "npm --prefix mobile run typecheck"
+  }
+}

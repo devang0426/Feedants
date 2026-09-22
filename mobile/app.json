@@ -1,0 +1,31 @@
+{
+  "expo": {
+    "name": "Feedants Competitions",
+    "slug": "feedants-competitions",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.feedants.competitions"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false,
+      "package": "com.feedants.competitions"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "scheme": "feedants",
+    "plugins": [
+      "expo-font"
+    ]
+  }
+}
