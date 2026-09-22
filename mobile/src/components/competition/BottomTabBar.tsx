@@ -1,21 +1,24 @@
 import React from 'react';
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLanguage } from '../../i18n';
 import { colors, hairline, spacing } from '../../theme';
+import { Avatar } from '../ui/Avatar';
 import { Text } from '../ui/Text';
 
 type TabKey = 'home' | 'explore' | 'create' | 'competitions' | 'profile';
 
 interface BottomTabBarProps {
   active: TabKey;
+  /** Stable identity for the generated profile avatar. */
+  avatarSeed?: string;
   avatarUrl?: string | null;
   onPress?: (tab: TabKey) => void;
 }
 
 /** Minimal tab bar: hairline top, outline icons, filled icon + teal label when active. */
-export function BottomTabBar({ active, avatarUrl, onPress }: BottomTabBarProps) {
+export function BottomTabBar({ active, avatarSeed, avatarUrl, onPress }: BottomTabBarProps) {
   const { t } = useLanguage();
   const insets = useSafeAreaInsets();
 
@@ -43,8 +46,8 @@ export function BottomTabBar({ active, avatarUrl, onPress }: BottomTabBarProps) 
         }
         return (
           <Pressable key={item.key} onPress={() => onPress?.(item.key)} style={styles.item} accessibilityRole="tab" accessibilityState={{ selected: isActive }}>
-            {item.key === 'profile' && avatarUrl ? (
-              <Image source={{ uri: avatarUrl }} style={[styles.avatar, isActive && styles.avatarActive]} />
+            {item.key === 'profile' && avatarSeed ? (
+              <Avatar seed={avatarSeed} uri={avatarUrl} size={24} style={isActive ? styles.avatarActive : undefined} />
             ) : (
               <Ionicons name={isActive ? item.activeIcon : item.icon} size={22} color={color} />
             )}
@@ -80,6 +83,5 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   plusActive: { backgroundColor: colors.primary },
-  avatar: { width: 24, height: 24, borderRadius: 12, backgroundColor: colors.chip },
   avatarActive: { borderWidth: 1.5, borderColor: colors.primary },
 });

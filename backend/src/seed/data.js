@@ -250,12 +250,15 @@ export function buildCompetitions(now = new Date()) {
  * Seeded accounts offered as one-click sign-in on the sign-in screen.
  * `hint` explains what each account is useful for demonstrating; the first
  * three are surfaced in the app (see `listDemoAccounts`).
+ *
+ * No `avatarUrl`: participants have not uploaded a photo, so the app draws a
+ * deterministic abstract avatar from their e-mail. Judges and past winners
+ * keep real imagery because the design shows photographs there.
  */
 export const DEMO_USERS = [
   {
     name: 'Devang',
     email: 'demo@feedants.app',
-    avatarUrl: avatar(68),
     hint: {
       en: 'Not registered yet - use to demo the full register and pay flow',
       hi: 'अभी पंजीकृत नहीं - पूरा पंजीकरण और भुगतान फ़्लो दिखाने के लिए',
@@ -264,7 +267,6 @@ export const DEMO_USERS = [
   {
     name: 'Asha Patel',
     email: 'asha@feedants.app',
-    avatarUrl: avatar(44),
     hint: {
       en: 'Already registered for the classical dance competition',
       hi: 'शास्त्रीय नृत्य प्रतियोगिता के लिए पहले से पंजीकृत',
@@ -273,15 +275,14 @@ export const DEMO_USERS = [
   {
     name: 'Rohan Gupta',
     email: 'rohan@feedants.app',
-    avatarUrl: avatar(15),
     hint: {
       en: 'A second participant - sign in to see shared spot counts update',
       hi: 'दूसरा प्रतिभागी - साझा स्थान गणना अपडेट होते देखें',
     },
   },
-  { name: 'Meera Joshi', email: 'meera@feedants.app', avatarUrl: avatar(20) },
-  { name: 'Kiran Das', email: 'kiran@feedants.app', avatarUrl: avatar(33) },
-  { name: 'Tara Singh', email: 'tara@feedants.app', avatarUrl: avatar(38) },
+  { name: 'Meera Joshi', email: 'meera@feedants.app' },
+  { name: 'Kiran Das', email: 'kiran@feedants.app' },
+  { name: 'Tara Singh', email: 'tara@feedants.app' },
 ];
 
 /**

@@ -42,6 +42,7 @@ function AppTabBar({ state, navigation }: BottomTabBarProps) {
   return (
     <BottomTabBar
       active={ROUTE_TAB[activeRoute] ?? 'home'}
+      avatarSeed={user?.email}
       avatarUrl={user?.avatarUrl}
       onPress={(tab) => navigation.navigate(TAB_ROUTE[tab])}
     />

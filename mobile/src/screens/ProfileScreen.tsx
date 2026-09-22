@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Image, Pressable, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -12,6 +12,7 @@ import { useLanguage, type Lang } from '../i18n';
 import { useAuth } from '../auth/AuthProvider';
 import { colors, radius, spacing, typography } from '../theme';
 import { formatMoney } from '../utils/format';
+import { Avatar } from '../components/ui/Avatar';
 import { Text } from '../components/ui/Text';
 import { Card } from '../components/ui/Card';
 import { Chip } from '../components/ui/Chip';
@@ -97,13 +98,7 @@ export function ProfileScreen() {
 
         <Card>
           <View style={styles.identity}>
-            {user.avatarUrl ? (
-              <Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
-            ) : (
-              <View style={[styles.avatar, styles.avatarFallback]}>
-                <Ionicons name="person" size={30} color={colors.textMuted} />
-              </View>
-            )}
+            <Avatar seed={user.email} uri={user.avatarUrl} size={64} />
             <View style={styles.identityText}>
               <Text style={styles.name}>{user.name}</Text>
               <Text style={typography.bodySecondary}>{user.email}</Text>
@@ -177,8 +172,6 @@ const styles = StyleSheet.create({
   content: { padding: spacing.lg, gap: spacing.md, paddingBottom: spacing.xxl },
   title: { marginBottom: spacing.xs },
   identity: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
-  avatar: { width: 64, height: 64, borderRadius: 32, backgroundColor: colors.chip },
-  avatarFallback: { alignItems: 'center', justifyContent: 'center' },
   identityText: { flex: 1 },
   name: { fontSize: 16, fontWeight: '600', color: colors.text },
   langRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: spacing.lg, paddingTop: spacing.md, borderTopWidth: 1, borderTopColor: colors.border },

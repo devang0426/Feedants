@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
   ActivityIndicator,
-  Image,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -20,6 +19,7 @@ import { isApiError } from '../api/client';
 import type { DemoAccount } from '../api/types';
 import { colors, hairline, radius, spacing, typography } from '../theme';
 import { Button } from '../components/ui/Button';
+import { Avatar } from '../components/ui/Avatar';
 import { Text } from '../components/ui/Text';
 import { useToast } from '../components/ui/Toast';
 import { ScreenHeader } from '../components/competition/ScreenHeader';
@@ -42,13 +42,7 @@ function AccountCard({ account, busy, onPress }: AccountCardProps) {
       accessibilityLabel={`Sign in as ${account.name}`}
       style={({ pressed }) => [styles.account, pressed && styles.accountPressed, busy && styles.accountBusy]}
     >
-      {account.avatarUrl ? (
-        <Image source={{ uri: account.avatarUrl }} style={styles.accountAvatar} />
-      ) : (
-        <View style={[styles.accountAvatar, styles.accountAvatarFallback]}>
-          <Ionicons name="person" size={20} color={colors.textMuted} />
-        </View>
-      )}
+      <Avatar seed={account.email} uri={account.avatarUrl} size={44} />
       <View style={styles.accountText}>
         <Text style={styles.accountName}>{account.name}</Text>
         <Text style={typography.captionMuted} numberOfLines={2}>
@@ -224,8 +218,6 @@ const styles = StyleSheet.create({
   },
   accountPressed: { backgroundColor: colors.primarySofter, borderColor: colors.primary },
   accountBusy: { opacity: 0.6 },
-  accountAvatar: { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.chip },
-  accountAvatarFallback: { alignItems: 'center', justifyContent: 'center' },
   accountText: { flex: 1, gap: 2 },
   accountName: { fontSize: 14.5, fontWeight: '600', color: colors.text },
   manualToggle: {

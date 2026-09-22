@@ -113,6 +113,13 @@ Repo: https://github.com/devang0426/Feedants
 - New `tests/auth.test.js` (7 tests) covering sign-in, name derivation, validation, `/auth/me`, the demo-accounts endpoint, and the two concurrency regressions.
 - Verification: 25/25 backend tests pass, `tsc` clean, web and Android bundles exported.
 
+#### Abstract avatars for participant profiles
+- Added `components/ui/Avatar.tsx`: a deterministic abstract avatar drawn from an FNV-1a hash of the seed (the user's e-mail) using plain Views. No SVG dependency, no network request, renders offline, and a person gets identical art on every screen and device. Four shape variants over eight muted duo-tones chosen to sit beside the teal system.
+- `uri` still wins when a real photo exists, so uploaded profile pictures keep working; the art is the fallback.
+- Demo users no longer carry stock portrait URLs, so the app draws their avatars. Used on the sign-in cards, the Profile header and the bottom tab bar.
+- Judges and past winners deliberately keep photographs: the design reference shows real imagery there, and the assignment grades design accuracy.
+- Verification: 25/25 backend tests, `tsc` clean, Android bundle exported, Atlas re-seeded and the demo-accounts endpoint confirmed returning `avatarUrl: null`.
+
 ---
 
 ## Verification log

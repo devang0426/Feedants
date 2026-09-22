@@ -252,7 +252,8 @@ export function CompetitionDetailsScreen({ route, navigation }: Props) {
       <PrimaryActionBar competition={competition} busy={busy} onPrimary={handlePrimary} onCancel={handleCancel} />
       <BottomTabBar
         active="competitions"
-        avatarUrl={user?.avatarUrl}
+        avatarSeed={user?.email}
+      avatarUrl={user?.avatarUrl}
         onPress={(tab) => navigation.navigate('MainTabs', { screen: TAB_ROUTE[tab] })}
       />
 
