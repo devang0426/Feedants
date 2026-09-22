@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, Pressable, RefreshControl, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { FlatList, Pressable, RefreshControl, StyleSheet, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 import type { RootStackParamList } from '../navigation/types';
-import type { Phase } from '../api/types';
-import { useCategories, useCompetitionList } from '../hooks/useCompetition';
+import { useCompetitionList } from '../hooks/useCompetition';
 import { useLanguage } from '../i18n';
 import { isApiError } from '../api/client';
 import { colors, radius, spacing, typography } from '../theme';
@@ -17,28 +16,6 @@ import { CompetitionRow } from '../components/competition/CompetitionRow';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 
-const PHASES: { key: Phase | undefined; labelKey: string }[] = [
-  { key: undefined, labelKey: 'all' },
-  { key: 'registration_open', labelKey: 'phase_registration_open' },
-  { key: 'upcoming', labelKey: 'phase_upcoming' },
-  { key: 'submission_open', labelKey: 'phase_submission_open' },
-  { key: 'judging', labelKey: 'phase_judging' },
-  { key: 'results_announced', labelKey: 'phase_results_announced' },
-];
-
-function FilterChip({ label, active, onPress }: { label: string; active: boolean; onPress: () => void }) {
-  return (
-    <Pressable
-      onPress={onPress}
-      accessibilityRole="button"
-      accessibilityState={{ selected: active }}
-      style={[styles.chip, active && styles.chipActive]}
-    >
-      <Text style={[styles.chipText, active && styles.chipTextActive]}>{label}</Text>
-    </Pressable>
-  );
-}
-
 function useDebounced<T>(value: T, delay = 300): T {
   const [debounced, setDebounced] = useState(value);
   useEffect(() => {
@@ -48,17 +25,19 @@ function useDebounced<T>(value: T, delay = 300): T {
   return debounced;
 }
 
+/**
+ * Search across competitions by title, judge or category. The backend also
+ * supports `category` and `phase` filters on this endpoint; they are simply
+ * not surfaced here.
+ */
 export function ExploreScreen() {
   const navigation = useNavigation<Nav>();
   const { t } = useLanguage();
   const insets = useSafeAreaInsets();
   const [search, setSearch] = useState('');
-  const [category, setCategory] = useState<string | undefined>();
-  const [phase, setPhase] = useState<Phase | undefined>();
   const q = useDebounced(search.trim());
 
-  const categories = useCategories();
-  const query = useCompetitionList({ q: q || undefined, category, phase });
+  const query = useCompetitionList({ q: q || undefined });
 
   return (
     <View style={[styles.screen, { paddingTop: insets.top }]}>
@@ -84,18 +63,6 @@ export function ExploreScreen() {
           ) : null}
         </View>
       </View>
-
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow} style={styles.chipScroll}>
-        <FilterChip label={t('all')} active={!category} onPress={() => setCategory(undefined)} />
-        {(categories.data ?? []).map((c) => (
-          <FilterChip key={c.key} label={c.label} active={category === c.key} onPress={() => setCategory(category === c.key ? undefined : c.key)} />
-        ))}
-      </ScrollView>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow} style={styles.chipScroll}>
-        {PHASES.map((p) => (
-          <FilterChip key={p.labelKey} label={t(p.labelKey)} active={phase === p.key} onPress={() => setPhase(p.key)} />
-        ))}
-      </ScrollView>
 
       {query.isPending ? (
         <LoadingState message={t('loading')} />
@@ -136,12 +103,6 @@ const styles = StyleSheet.create({
   header: { paddingHorizontal: spacing.lg, gap: spacing.md },
   search: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, backgroundColor: colors.chip, borderRadius: radius.md, paddingHorizontal: spacing.md, height: 44 },
   searchInput: { flex: 1, fontSize: 14, color: colors.text, paddingVertical: 0 },
-  chipScroll: { flexGrow: 0, marginTop: spacing.md },
-  chipRow: { paddingHorizontal: spacing.lg, gap: spacing.sm },
-  chip: { paddingHorizontal: spacing.md, paddingVertical: 6, borderRadius: radius.pill, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.borderStrong },
-  chipActive: { backgroundColor: colors.primarySoft, borderColor: colors.primary },
-  chipText: { fontSize: 12.5, fontWeight: '500', color: colors.textSecondary },
-  chipTextActive: { color: colors.primary, fontWeight: '600' },
-  list: { padding: spacing.lg, paddingTop: spacing.md, flexGrow: 1 },
+  list: { padding: spacing.lg, paddingTop: spacing.lg, flexGrow: 1 },
   empty: { alignItems: 'center', paddingVertical: spacing.xxl * 2, gap: spacing.xs },
 });

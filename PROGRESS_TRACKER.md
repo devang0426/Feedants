@@ -99,6 +99,11 @@ Repo: https://github.com/devang0426/Feedants
 - Backend verified unchanged and correct: cancel works while `reserved` and while `confirmed`, releases the spot (`booked` decrements), and resets the CTA to "Register". `canCancel` is intentionally false once registration closes or a submission exists, so the button is hidden in those states.
 - Verification: `tsc` clean, Android bundle exported, backend cancel paths exercised over HTTP.
 
+#### Explore: filter chips removed
+- Removed the category and phase filter chip rows from the Explore screen at the user's request; search is now the only control.
+- The backend keeps `?category=` and `?phase=` on `GET /competitions` and the `/competitions/categories` endpoint, so the filters can be restored without server changes.
+- Verification: `tsc` clean, web bundle exported.
+
 ---
 
 ## Verification log

@@ -71,7 +71,7 @@ The app starts on a **sign-in screen** (e-mail + name, no password in this demo;
 | Tab | What it does |
 | --- | --- |
 | **Home** | Closing-soon carousel with live countdowns, open now, upcoming, results out |
-| **Explore** | Search (title, judge, category) with category and phase filters |
+| **Explore** | Search across title, judge and category |
 | **+** | Organiser placeholder ("coming soon") |
 | **Competitions** | All seven seeded competitions, every lifecycle state (open, closing in hours, full, upcoming, submissions open, judging, results out) |
 | **Profile** | Identity, language, referral code/link/earnings, my registrations with status, sign out |
