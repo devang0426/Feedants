@@ -120,6 +120,14 @@ Repo: https://github.com/devang0426/Feedants
 - Judges and past winners deliberately keep photographs: the design reference shows real imagery there, and the assignment grades design accuracy.
 - Verification: 25/25 backend tests, `tsc` clean, Android bundle exported, Atlas re-seeded and the demo-accounts endpoint confirmed returning `avatarUrl: null`.
 
+#### Phone connectivity: diagnosis corrected + tunnel handling
+- Investigated "Expo does not load on my phone". My first diagnosis (Windows Firewall) was **wrong**: `netsh` shows Node.js already has enabled Allow rules for any port on both the Private and Public profiles, and both dev processes run that exact binary (`C:\Program Files
+odejs
+ode.exe`). Both servers also answer on the LAN IP. So the block is not the Windows firewall.
+- Remaining likely causes, in order: the laptop is on the phone's own Personal Hotspot (iOS generally will not route from the hosting phone back to a hotspot client), iOS Local Network permission not granted to Expo Go, or an Expo Go too old for SDK 57.
+- `config.ts` no longer guesses an API URL in tunnel mode. A named (non-IP) dev-server host means a relay with nothing behind port 4000, so it now logs an explicit warning and returns a sentinel instead of a URL that always times out. Exported `API_URL_MISCONFIGURED` for callers.
+- README gained a collapsible "The app will not load on my phone" section with an ordered checklist, the tunnel recipe for both app and API, and the `--web` fallback.
+
 ---
 
 ## Verification log

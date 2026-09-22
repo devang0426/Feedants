@@ -64,7 +64,37 @@ cp .env.example .env      # optional
 npx expo start            # press a (Android), i (iOS) or scan the QR with Expo Go
 ```
 
-The API URL is auto-detected: on a physical phone the app uses the LAN address of the Expo dev server (your computer must be reachable on port 4000 – allow it through the Windows firewall), the Android emulator uses `10.0.2.2`, the iOS simulator uses `localhost`. Set `EXPO_PUBLIC_API_URL` in `mobile/.env` to override.
+The API URL is auto-detected: on a physical phone the app uses the LAN address of the Expo dev server, the Android emulator uses `10.0.2.2`, the iOS simulator uses `localhost`. Set `EXPO_PUBLIC_API_URL` in `mobile/.env` to override.
+
+<details>
+<summary><b>The app will not load on my phone</b></summary>
+
+The phone must reach two ports on your computer: **8081** (the Expo dev server, which serves the app) and **4000** (the API). Work through these in order.
+
+1. **Same network.** The phone and the computer must be on the same Wi-Fi. A phone on mobile data cannot reach your laptop. If the laptop is using the phone's Personal Hotspot, note that iOS often will not route from the hosting phone back to a client on its own hotspot; use a normal Wi-Fi network for both instead.
+2. **iOS Local Network permission.** iOS blocks local connections until granted. Check **Settings → Expo Go → Local Network** and turn it on, then fully quit and reopen Expo Go.
+3. **Expo Go version.** This project targets **SDK 57**. An older Expo Go refuses the project with a version message rather than a network error. Update it from the App Store or Play Store.
+4. **Windows Firewall.** Node usually gets an allow-all-ports rule when it is first installed; check with `netsh advfirewall firewall show rule name=all dir=in verbose | findstr node.exe`. If there is no Allow rule, add one from an **administrator** PowerShell:
+   ```
+   New-NetFirewallRule -DisplayName "Feedants dev" -Direction Inbound -Protocol TCP -LocalPort 4000,8081 -Action Allow
+   ```
+   Remove it later with `Remove-NetFirewallRule -DisplayName "Feedants dev"`.
+5. **Confirm reachability from the phone.** Open `http://<your-lan-ip>:4000/api/v1/health` in the phone's browser. A JSON response means the network is fine and the problem is Expo Go; a timeout means the phone genuinely cannot reach the computer.
+
+**If none of that works, bypass the network entirely with a tunnel.** Both the app *and* the API must be tunnelled, because the tunnel host has no port 4000 behind it:
+
+```bash
+ngrok http 4000                      # copy the https URL it prints
+# put it in mobile/.env:
+#   EXPO_PUBLIC_API_URL=https://<id>.ngrok-free.app/api/v1
+npx expo start --tunnel
+```
+
+The app detects tunnel mode and logs an explicit warning if `EXPO_PUBLIC_API_URL` is missing, rather than silently timing out.
+
+**Quickest fallback of all:** `npx expo start --web` runs the same React Native code in the browser on the computer itself, with no phone or network involved.
+
+</details>
 
 The app starts on a **sign-in screen**. Tap one of the demo account cards to sign in with a single click; each card says what that account is useful for demonstrating (for example, one is not yet registered so you can run the full register and pay flow, another is already registered). "Use another e-mail" reveals a manual form. No password is required in this demo. Sign out from the **Profile** tab to switch accounts. After sign-in:
 
