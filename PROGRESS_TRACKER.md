@@ -104,6 +104,15 @@ Repo: https://github.com/devang0426/Feedants
 - The backend keeps `?category=` and `?phase=` on `GET /competitions` and the `/competitions/categories` endpoint, so the filters can be restored without server changes.
 - Verification: `tsc` clean, web bundle exported.
 
+#### Sign in / sign out with one-click demo accounts
+- **Bug found and fixed (concurrency):** first-time sign-in inserted the user row *without* a referral code and assigned it in a follow-up save. The unique index treats a missing field as null and only one document may hold null, so simultaneous first-time sign-ins collided: a live test had 3 of 6 fail with `DUPLICATE`. The code is now generated inside `$setOnInsert`, the index is `sparse`, and a duplicate e-mail race re-reads the winner's row instead of erroring. 8/8 and then 25/25 concurrent sign-ups now succeed.
+- New `GET /auth/demo-accounts`: returns the seeded demo accounts with an avatar and a one-line hint describing what each is useful for demonstrating, localised EN/HI. Returns an empty list in production so it can never leak real accounts.
+- Sign-in screen rebuilt: the demo accounts are now prominent one-click cards (name, avatar, hint, per-card spinner) instead of small chips, with "Use another e-mail" revealing the manual form. Accounts come from the backend rather than being hardcoded in the app.
+- Sign out stays on Profile behind the cross-platform confirm dialog; it clears the token and per-user cache and returns to the sign-in screen, where switching accounts is one tap.
+- Removed 7 dead i18n keys left by earlier changes; added a comment marking the server-driven `primaryAction` label keys so they are not "cleaned up" by a static search. EN and HI verified in sync (137 keys each).
+- New `tests/auth.test.js` (7 tests) covering sign-in, name derivation, validation, `/auth/me`, the demo-accounts endpoint, and the two concurrency regressions.
+- Verification: 25/25 backend tests pass, `tsc` clean, web and Android bundles exported.
+
 ---
 
 ## Verification log

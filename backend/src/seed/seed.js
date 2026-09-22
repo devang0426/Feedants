@@ -17,7 +17,9 @@ export async function seedDatabase({ reset = false, now = new Date() } = {}) {
     ]);
   }
 
-  const users = await User.insertMany(DEMO_USERS);
+  // `hint` is presentation-only metadata for the sign-in screen, not a field
+  // on the User schema, so it is dropped before inserting.
+  const users = await User.insertMany(DEMO_USERS.map(({ hint, ...user }) => user));
   const userByEmail = new Map(users.map((u) => [u.email, u]));
   const competitions = await Competition.insertMany(buildCompetitions(now));
 

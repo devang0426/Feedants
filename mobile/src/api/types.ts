@@ -189,6 +189,14 @@ export interface User {
   referral: { code: string; link: string; earningsPaise: number };
 }
 
+/** A seeded account offered as one-click sign-in (development only). */
+export interface DemoAccount {
+  email: string;
+  name: string;
+  avatarUrl: string | null;
+  hint: string;
+}
+
 export interface ApiErrorBody {
   code: string;
   message: string;

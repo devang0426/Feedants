@@ -3,6 +3,7 @@ import type {
   Category,
   CompetitionDetails,
   CompetitionSummary,
+  DemoAccount,
   ListFilters,
   MutationResult,
   MyRegistration,
@@ -49,4 +50,5 @@ export const authApi = {
   demoLogin: (body: { email: string; name?: string }) =>
     request<{ token: string; user: User }>('/auth/demo-login', { method: 'POST', body }),
   me: () => request<{ user: User }>('/auth/me').then((d) => d.user),
+  demoAccounts: () => request<{ accounts: DemoAccount[] }>('/auth/demo-accounts').then((d) => d.accounts),
 };

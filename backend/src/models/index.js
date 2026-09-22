@@ -1,4 +1,4 @@
-export { User } from './User.js';
+export { User, generateReferralCode } from './User.js';
 export { Competition, COMPETITION_STATUS } from './Competition.js';
 export {
   Registration,

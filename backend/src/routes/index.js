@@ -32,6 +32,7 @@ router.get('/health', (_req, res) => sendOk(res, { status: 'ok' }));
 
 // --- Auth -------------------------------------------------------------------
 router.post('/auth/demo-login', validate({ body: auth.demoLoginSchema }), auth.postDemoLogin);
+router.get('/auth/demo-accounts', auth.getDemoAccounts);
 router.get('/auth/me', requireAuth, auth.getMe);
 
 // --- Current user ----------------------------------------------------------

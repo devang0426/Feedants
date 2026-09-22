@@ -23,10 +23,6 @@ function resolveApiBaseUrl(): string {
 
 export const API_BASE_URL = resolveApiBaseUrl();
 
-export const DEMO_USER = {
-  email: process.env.EXPO_PUBLIC_DEMO_EMAIL ?? 'demo@feedants.app',
-  name: process.env.EXPO_PUBLIC_DEMO_NAME ?? 'Devang',
-};
 
 /** How often the details screen re-syncs with the server (ms). */
 export const DETAILS_POLL_INTERVAL_MS = 15_000;

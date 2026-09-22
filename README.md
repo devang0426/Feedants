@@ -7,7 +7,7 @@ A production-style implementation of the **Competition Details** screen from the
 | Mobile   | React Native (Expo SDK 57, TypeScript), React Navigation, TanStack Query |
 | Backend  | Node.js 20+, Express 4, Mongoose 8, Zod, JWT, Pino                       |
 | Database | MongoDB 6+ (auto-starts an in-memory instance if none is configured)     |
-| Tests    | Vitest + Supertest + mongodb-memory-server (13 tests incl. a 200-user race) |
+| Tests    | Vitest + Supertest + mongodb-memory-server (25 tests incl. a 200-user race) |
 
 ```
 p8/
@@ -52,7 +52,7 @@ npm run dev               # http://localhost:4000/api/v1
 With `MONGODB_URI` empty (the default) the server starts an **in-memory MongoDB** and seeds demo data on every boot, so nothing needs to be installed. For a persistent database either run `docker compose up -d` from the repo root and set `MONGODB_URI=mongodb://localhost:27017/feedants`, or point it at Atlas. A persistent database is seeded automatically when empty; `npm run seed` (or `POST /api/v1/admin/seed`) resets it.
 
 ```bash
-npm test                  # 13 tests, ~15 s (downloads a MongoDB binary on first run)
+npm test                  # 25 tests, ~20 s (downloads a MongoDB binary on first run)
 ```
 
 ### Mobile app
@@ -66,7 +66,7 @@ npx expo start            # press a (Android), i (iOS) or scan the QR with Expo 
 
 The API URL is auto-detected: on a physical phone the app uses the LAN address of the Expo dev server (your computer must be reachable on port 4000 – allow it through the Windows firewall), the Android emulator uses `10.0.2.2`, the iOS simulator uses `localhost`. Set `EXPO_PUBLIC_API_URL` in `mobile/.env` to override.
 
-The app starts on a **sign-in screen** (e-mail + name, no password in this demo; tap a demo account chip to sign in with one touch). After sign-in:
+The app starts on a **sign-in screen**. Tap one of the demo account cards to sign in with a single click; each card says what that account is useful for demonstrating (for example, one is not yet registered so you can run the full register and pay flow, another is already registered). "Use another e-mail" reveals a manual form. No password is required in this demo. Sign out from the **Profile** tab to switch accounts. After sign-in:
 
 | Tab | What it does |
 | --- | --- |
@@ -113,8 +113,7 @@ The `preview` profile in `mobile/eas.json` builds an APK for sideloading; `produ
 
 | Variable                                        | Purpose                                             |
 | ----------------------------------------------- | --------------------------------------------------- |
-| `EXPO_PUBLIC_API_URL`                           | Backend base URL (optional, auto-detected otherwise) |
-| `EXPO_PUBLIC_DEMO_EMAIL` / `EXPO_PUBLIC_DEMO_NAME` | Demo identity the app signs in as                   |
+| `EXPO_PUBLIC_API_URL` | Backend base URL (optional, auto-detected otherwise) |
 
 ---
 
@@ -126,6 +125,7 @@ Base path `/api/v1`. Every response is `{ ok, data | error, serverTime }`; error
 | -------- | ---------------------------------------- | ------ | --------------------------------------------------------- |
 | `POST`   | `/auth/demo-login`                       | –      | `{ email, name? }` → JWT (stand-in for OTP/OAuth)          |
 | `GET`    | `/auth/me`                               | user   | Current user + referral link                               |
+| `GET`    | `/auth/demo-accounts`                    | -      | Seeded demo accounts for one-click sign in (dev only)      |
 | `GET`    | `/me/registrations`                      | user   | The user's registrations with competition summaries        |
 | `GET`    | `/competitions?q=&category=&phase=`      | opt.   | Card list with derived phase and capacity, searchable      |
 | `GET`    | `/competitions/categories`               | –      | Distinct categories for filter chips                       |
