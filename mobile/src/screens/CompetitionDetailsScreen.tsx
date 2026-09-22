@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Alert, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
+import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { Text } from '../components/ui/Text';
 import { DetailsSkeleton } from '../components/ui/Skeleton';
 import { useToast } from '../components/ui/Toast';
+import { useConfirm } from '../components/ui/ConfirmDialog';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { TAB_ROUTE, type RootStackParamList } from '../navigation/types';
 import { useCompetitionActions, useCompetitionDetails } from '../hooks/useCompetition';
@@ -58,6 +59,7 @@ export function CompetitionDetailsScreen({ route, navigation }: Props) {
     actions.submit.isPending;
 
   const toast = useToast();
+  const confirm = useConfirm();
 
   const showError = useCallback(
     (err: unknown) => {
@@ -144,28 +146,27 @@ export function CompetitionDetailsScreen({ route, navigation }: Props) {
   const handlePaymentFailure = useCallback(
     (message: string) => {
       setPaymentSheet({ visible: false, payment: null });
-      Alert.alert(t('error_title'), message);
+      toast.show(message, 'error');
     },
-    [t]
+    [toast]
   );
 
-  const handleCancel = useCallback(() => {
-    Alert.alert(t('cancel_confirm_title'), t('cancel_confirm_body'), [
-      { text: t('keep'), style: 'cancel' },
-      {
-        text: t('confirm'),
-        style: 'destructive',
-        onPress: async () => {
-          try {
-            await actions.cancel.mutateAsync();
-            celebrate(t('success_cancelled'));
-          } catch (err) {
-            showError(err);
-          }
-        },
-      },
-    ]);
-  }, [actions.cancel, showError, celebrate, t]);
+  const handleCancel = useCallback(async () => {
+    const ok = await confirm({
+      title: t('cancel_confirm_title'),
+      message: t('cancel_confirm_body'),
+      confirmLabel: t('confirm'),
+      cancelLabel: t('keep'),
+      destructive: true,
+    });
+    if (!ok) return;
+    try {
+      await actions.cancel.mutateAsync();
+      celebrate(t('success_cancelled'));
+    } catch (err) {
+      showError(err);
+    }
+  }, [actions.cancel, confirm, showError, celebrate, t]);
 
   const handleSubmit = useCallback(
     async (values: { title?: string; mediaUrl: string }) => {

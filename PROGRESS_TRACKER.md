@@ -92,6 +92,13 @@ Repo: https://github.com/devang0426/Feedants
 - Added stall detection: if `checkout.js` has not reported in within 10 s (or errors), the sheet shows "The payment page did not load" with a Try again button instead of staying blank.
 - Verification: `tsc` clean; web bundle contains the `.web` variant only; Android bundle exported.
 
+#### Fix: "Cancel registration" button did nothing
+- Cause: the button opened a React Native `Alert` confirmation, and `Alert` is a no-op on web, so the tap silently did nothing in the browser preview. Sign-out and payment-failure messages had the same problem.
+- Added `components/ui/ConfirmDialog.tsx`: a promise-based confirm rendered with a `Modal`, so it works identically on iOS, Android and web. Wired into `App.tsx` as `ConfirmProvider`.
+- Cancel registration and sign-out now use it; payment failure now uses a toast. No `Alert` calls remain in the app.
+- Backend verified unchanged and correct: cancel works while `reserved` and while `confirmed`, releases the spot (`booked` decrements), and resets the CTA to "Register". `canCancel` is intentionally false once registration closes or a submission exists, so the button is hidden in those states.
+- Verification: `tsc` clean, Android bundle exported, backend cancel paths exercised over HTTP.
+
 ---
 
 ## Verification log

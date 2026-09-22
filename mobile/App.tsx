@@ -16,6 +16,7 @@ import { setRequestLang } from './src/api/client';
 import { RootNavigator } from './src/navigation';
 import { LoadingState } from './src/components/ui/StateViews';
 import { ToastProvider } from './src/components/ui/Toast';
+import { ConfirmProvider } from './src/components/ui/ConfirmDialog';
 import { SignInScreen } from './src/screens/SignInScreen';
 import { colors } from './src/theme';
 
@@ -81,8 +82,10 @@ export default function App() {
           <LanguageSync />
           <AuthProvider>
             <ToastProvider>
-              <StatusBar style="dark" />
-              <Gate />
+              <ConfirmProvider>
+                <StatusBar style="dark" />
+                <Gate />
+              </ConfirmProvider>
             </ToastProvider>
           </AuthProvider>
         </LanguageProvider>

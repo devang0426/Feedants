@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, Image, Pressable, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
+import { Image, Pressable, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -18,6 +18,7 @@ import { Chip } from '../components/ui/Chip';
 import { Button } from '../components/ui/Button';
 import { SkeletonBlock } from '../components/ui/Skeleton';
 import { useToast } from '../components/ui/Toast';
+import { useConfirm } from '../components/ui/ConfirmDialog';
 import { CompetitionRow } from '../components/competition/CompetitionRow';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
@@ -52,6 +53,7 @@ export function ProfileScreen() {
   const { t, lang, setLang } = useLanguage();
   const { user, signOut } = useAuth();
   const toast = useToast();
+  const confirm = useConfirm();
   const insets = useSafeAreaInsets();
   const registrations = useMyRegistrations();
   const [copied, setCopied] = useState(false);
@@ -70,11 +72,15 @@ export function ProfileScreen() {
     toast.show(t('copied'), 'success');
   };
 
-  const confirmSignOut = () => {
-    Alert.alert(t('sign_out'), user.email, [
-      { text: t('cancel'), style: 'cancel' },
-      { text: t('sign_out'), style: 'destructive', onPress: () => void signOut() },
-    ]);
+  const confirmSignOut = async () => {
+    const ok = await confirm({
+      title: t('sign_out'),
+      message: user.email,
+      confirmLabel: t('sign_out'),
+      cancelLabel: t('cancel'),
+      destructive: true,
+    });
+    if (ok) await signOut();
   };
 
   const active = (registrations.data ?? []).filter((r) => r.isActive);
