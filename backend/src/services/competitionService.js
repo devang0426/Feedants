@@ -202,28 +202,63 @@ export async function getCompetitionDetails({ idOrSlug, user, lang, now = new Da
 }
 
 /** Compact card representation for list screens. */
-export async function listCompetitions({ lang, now = new Date() }) {
-  const competitions = await Competition.find({ status: { $ne: COMPETITION_STATUS.DRAFT } })
+export function serializeCompetitionSummary(c, { lang, now }) {
+  const windows = getWindows(c, now);
+  return {
+    id: String(c._id),
+    slug: c.slug,
+    title: t(c.title, lang),
+    category: t(c.category, lang),
+    phase: getPhase(c, now),
+    entryFeePaise: c.entryFeePaise,
+    prizePoolPaise: c.prizePoolPaise,
+    currency: c.currency,
+    capacity: { ...windows.capacity, isFull: windows.registration.isFull },
+    registrationClosesAt: c.schedule.registrationClosesAt,
+    submissionEndsAt: c.schedule.submissionEndsAt,
+    resultAt: c.schedule.resultAt,
+    judgeName: c.judge?.name ?? null,
+    judgeAvatarUrl: c.judge?.avatarUrl ?? null,
+  };
+}
+
+const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+/**
+ * List with optional search/filters. `q` and `category` are pushed to the
+ * database; `phase` is derived from dates so it is applied after derivation
+ * (catalogue sizes are small; a materialised phase field with a scheduled
+ * refresh would be the next step at scale).
+ */
+export async function listCompetitions({ lang, q, category, phase, now = new Date() }) {
+  const conditions = [{ status: { $ne: COMPETITION_STATUS.DRAFT } }];
+  if (q) {
+    const rx = new RegExp(escapeRegex(q.trim()), 'i');
+    conditions.push({ $or: [{ 'title.en': rx }, { 'title.hi': rx }, { 'judge.name': rx }, { 'category.en': rx }] });
+  }
+  if (category) {
+    const rx = new RegExp(`^${escapeRegex(category.trim())}$`, 'i');
+    conditions.push({ $or: [{ 'category.en': rx }, { 'category.hi': rx }] });
+  }
+
+  const competitions = await Competition.find({ $and: conditions })
     .sort({ 'schedule.registrationClosesAt': 1 })
     .lean();
+  const summaries = competitions.map((c) => serializeCompetitionSummary(c, { lang, now }));
+  return phase ? summaries.filter((s) => s.phase === phase) : summaries;
+}
 
-  return competitions.map((c) => {
-    const windows = getWindows(c, now);
-    return {
-      id: String(c._id),
-      slug: c.slug,
-      title: t(c.title, lang),
-      category: t(c.category, lang),
-      phase: getPhase(c, now),
-      entryFeePaise: c.entryFeePaise,
-      prizePoolPaise: c.prizePoolPaise,
-      currency: c.currency,
-      capacity: { ...windows.capacity, isFull: windows.registration.isFull },
-      registrationClosesAt: c.schedule.registrationClosesAt,
-      judgeName: c.judge?.name ?? null,
-      judgeAvatarUrl: c.judge?.avatarUrl ?? null,
-    };
-  });
+/** Distinct categories for filter chips (localised). */
+export async function listCategories({ lang }) {
+  const rows = await Competition.find({ status: { $ne: COMPETITION_STATUS.DRAFT } })
+    .select('category')
+    .lean();
+  const seen = new Map();
+  for (const r of rows) {
+    const key = r.category?.en?.toLowerCase();
+    if (key && !seen.has(key)) seen.set(key, { key: r.category.en, label: t(r.category, lang) });
+  }
+  return [...seen.values()];
 }
 
 /**

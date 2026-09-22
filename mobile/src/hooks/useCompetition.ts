@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { competitionsApi } from '../api/competitions';
-import type { CompetitionDetails, MutationResult } from '../api/types';
+import type { CompetitionDetails, ListFilters, MutationResult } from '../api/types';
 import { useLanguage } from '../i18n';
 import { useAuth } from '../auth/AuthProvider';
 import { DETAILS_POLL_INTERVAL_MS } from '../config';
@@ -9,17 +9,41 @@ import { useServerNow } from './useCountdown';
 
 export const competitionKeys = {
   all: ['competitions'] as const,
-  list: (lang: string, userId: string | null) => ['competitions', 'list', lang, userId] as const,
+  list: (lang: string, userId: string | null, filters: ListFilters) =>
+    ['competitions', 'list', lang, userId, filters] as const,
+  categories: (lang: string) => ['competitions', 'categories', lang] as const,
   details: (idOrSlug: string, lang: string, userId: string | null) =>
     ['competitions', 'details', idOrSlug, lang, userId] as const,
+  mine: (lang: string, userId: string | null) => ['competitions', 'mine', lang, userId] as const,
 };
 
-export function useCompetitionList() {
+export function useCompetitionList(filters: ListFilters = {}) {
   const { lang } = useLanguage();
   const { user } = useAuth();
   return useQuery({
-    queryKey: competitionKeys.list(lang, user?.id ?? null),
-    queryFn: competitionsApi.list,
+    queryKey: competitionKeys.list(lang, user?.id ?? null, filters),
+    queryFn: () => competitionsApi.list(filters),
+    staleTime: 10_000,
+    placeholderData: (previous) => previous,
+  });
+}
+
+export function useCategories() {
+  const { lang } = useLanguage();
+  return useQuery({
+    queryKey: competitionKeys.categories(lang),
+    queryFn: competitionsApi.categories,
+    staleTime: 5 * 60_000,
+  });
+}
+
+export function useMyRegistrations() {
+  const { lang } = useLanguage();
+  const { user } = useAuth();
+  return useQuery({
+    queryKey: competitionKeys.mine(lang, user?.id ?? null),
+    queryFn: competitionsApi.myRegistrations,
+    enabled: Boolean(user),
     staleTime: 10_000,
   });
 }
@@ -79,6 +103,7 @@ function useDetailsMutation<TVars>(
         result.competition
       );
       void queryClient.invalidateQueries({ queryKey: ['competitions', 'list'] });
+      void queryClient.invalidateQueries({ queryKey: ['competitions', 'mine'] });
     },
     onError: () => {
       // Any conflict (full, closed, expired) means our snapshot is stale: refresh it.

@@ -4,6 +4,7 @@ import { sendOk } from '../utils/respond.js';
 import {
   getCompetitionDetails,
   listCompetitions,
+  listCategories,
   adminUpdateCompetition,
 } from '../services/competitionService.js';
 
@@ -27,9 +28,24 @@ export const adminUpdateSchema = z
   })
   .refine((v) => Object.keys(v).length > 0, { message: 'Nothing to update' });
 
+export const listQuerySchema = z.object({
+  q: z.string().trim().max(80).optional(),
+  category: z.string().trim().max(40).optional(),
+  phase: z
+    .enum(['upcoming', 'registration_open', 'registration_closed', 'submission_open', 'judging', 'results_announced', 'cancelled'])
+    .optional(),
+  lang: z.string().optional(),
+});
+
 export const getList = asyncHandler(async (req, res) => {
-  const competitions = await listCompetitions({ lang: req.lang });
+  const { q, category, phase } = req.query;
+  const competitions = await listCompetitions({ lang: req.lang, q, category, phase });
   sendOk(res, { competitions });
+});
+
+export const getCategories = asyncHandler(async (req, res) => {
+  const categories = await listCategories({ lang: req.lang });
+  sendOk(res, { categories });
 });
 
 export const getDetails = asyncHandler(async (req, res) => {

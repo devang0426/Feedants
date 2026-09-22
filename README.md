@@ -66,7 +66,30 @@ npx expo start            # press a (Android), i (iOS) or scan the QR with Expo 
 
 The API URL is auto-detected: on a physical phone the app uses the LAN address of the Expo dev server (your computer must be reachable on port 4000 – allow it through the Windows firewall), the Android emulator uses `10.0.2.2`, the iOS simulator uses `localhost`. Set `EXPO_PUBLIC_API_URL` in `mobile/.env` to override.
 
-The app opens directly on the design screen (`feedants-classical-dance`). The **Competitions** tab lists seven seeded competitions covering every state (open, closing in hours, full, upcoming, submissions open, judging, results out), and the "Signed in as …" row lets you switch demo users to observe multi-user consistency.
+The app starts on a **sign-in screen** (e-mail + name, no password in this demo; tap a demo account chip to sign in with one touch). After sign-in:
+
+| Tab | What it does |
+| --- | --- |
+| **Home** | Closing-soon carousel with live countdowns, open now, upcoming, results out |
+| **Explore** | Search (title, judge, category) with category and phase filters |
+| **+** | Organiser placeholder ("coming soon") |
+| **Competitions** | All seven seeded competitions, every lifecycle state (open, closing in hours, full, upcoming, submissions open, judging, results out) |
+| **Profile** | Identity, language, referral code/link/earnings, my registrations with status, sign out |
+
+Tap any competition to open the **Competition Details** screen from the design (`feedants-classical-dance` is the one that matches the reference). Sign out and sign in as another demo user (e.g. `asha@feedants.app`) to watch spots-left and registration state stay consistent across users.
+
+Progress and change history: [PROGRESS_TRACKER.md](PROGRESS_TRACKER.md).
+
+### Building an installable APK
+
+```bash
+npm i -g eas-cli
+cd mobile && eas login
+# set EXPO_PUBLIC_API_URL in eas.json to your deployed backend
+eas build -p android --profile preview      # produces an .apk download link
+```
+
+The `preview` profile in `mobile/eas.json` builds an APK for sideloading; `production` builds an AAB for the Play Store. The backend must be reachable from the internet for a built app (deploy it to Render/Railway/Fly, or tunnel with ngrok for a quick test).
 
 ### Environment variables
 
@@ -103,7 +126,9 @@ Base path `/api/v1`. Every response is `{ ok, data | error, serverTime }`; error
 | -------- | ---------------------------------------- | ------ | --------------------------------------------------------- |
 | `POST`   | `/auth/demo-login`                       | –      | `{ email, name? }` → JWT (stand-in for OTP/OAuth)          |
 | `GET`    | `/auth/me`                               | user   | Current user + referral link                               |
-| `GET`    | `/competitions`                          | opt.   | Card list with derived phase and capacity                  |
+| `GET`    | `/me/registrations`                      | user   | The user's registrations with competition summaries        |
+| `GET`    | `/competitions?q=&category=&phase=`      | opt.   | Card list with derived phase and capacity, searchable      |
+| `GET`    | `/competitions/categories`               | –      | Distinct categories for filter chips                       |
 | `GET`    | `/competitions/:idOrSlug`                | opt.   | **Screen view-model** incl. `viewer` state & primary action |
 | `POST`   | `/competitions/:id/registrations`        | user   | Reserve a spot (free → confirmed; paid → payment order)    |
 | `POST`   | `/competitions/:id/registrations/confirm`| user   | `{ paymentId, signature }` → confirmed                     |

@@ -329,6 +329,17 @@ export async function releaseExpiredReservations(now = new Date()) {
   return released;
 }
 
+/** All of a user's registrations (any status) joined with their competition, newest first. */
+export async function listUserRegistrations(userId) {
+  const registrations = await Registration.find({ userId }).sort({ updatedAt: -1 }).lean();
+  if (!registrations.length) return [];
+  const competitions = await Competition.find({ _id: { $in: registrations.map((r) => r.competitionId) } }).lean();
+  const byId = new Map(competitions.map((c) => [String(c._id), c]));
+  return registrations
+    .map((r) => ({ registration: r, competition: byId.get(String(r.competitionId)) }))
+    .filter((x) => x.competition);
+}
+
 export async function findUserRegistration(competitionId, userId) {
   if (!userId) return null;
   return Registration.findOne({

@@ -34,8 +34,12 @@ router.get('/health', (_req, res) => sendOk(res, { status: 'ok' }));
 router.post('/auth/demo-login', validate({ body: auth.demoLoginSchema }), auth.postDemoLogin);
 router.get('/auth/me', requireAuth, auth.getMe);
 
+// --- Current user ----------------------------------------------------------
+router.get('/me/registrations', requireAuth, registrations.getMyRegistrations);
+
 // --- Competitions (read) ---------------------------------------------------
-router.get('/competitions', optionalAuth, competitions.getList);
+router.get('/competitions', optionalAuth, validate({ query: competitions.listQuerySchema }), competitions.getList);
+router.get('/competitions/categories', competitions.getCategories);
 router.get(
   '/competitions/:idOrSlug',
   optionalAuth,

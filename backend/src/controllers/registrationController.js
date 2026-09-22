@@ -5,9 +5,28 @@ import {
   registerForCompetition,
   confirmRegistrationPayment,
   cancelRegistration,
+  listUserRegistrations,
 } from '../services/registrationService.js';
-import { getCompetitionDetails } from '../services/competitionService.js';
+import { getCompetitionDetails, serializeCompetitionSummary } from '../services/competitionService.js';
 import { toClientPayment } from '../services/paymentService.js';
+
+/** The signed-in user's registrations with a card summary of each competition. */
+export const getMyRegistrations = asyncHandler(async (req, res) => {
+  const now = new Date();
+  const rows = await listUserRegistrations(req.user._id);
+  const registrations = rows.map(({ registration, competition }) => ({
+    id: String(registration._id),
+    status: registration.status,
+    isActive:
+      registration.status === 'confirmed' ||
+      (registration.status === 'reserved' && registration.expiresAt > now),
+    confirmedAt: registration.confirmedAt ?? null,
+    expiresAt: registration.expiresAt ?? null,
+    amountPaidPaise: registration.payment?.paidAt ? registration.payment.amountPaise : 0,
+    competition: serializeCompetitionSummary(competition, { lang: req.lang, now }),
+  }));
+  sendOk(res, { registrations });
+});
 
 export const confirmPaymentSchema = z.object({
   paymentId: z.string().min(1).max(120),

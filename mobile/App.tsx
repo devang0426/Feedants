@@ -14,8 +14,9 @@ import { LanguageProvider, useLanguage } from './src/i18n';
 import { AuthProvider, useAuth } from './src/auth/AuthProvider';
 import { setRequestLang } from './src/api/client';
 import { RootNavigator } from './src/navigation';
-import { LoadingState, ErrorState } from './src/components/ui/StateViews';
+import { LoadingState } from './src/components/ui/StateViews';
 import { ToastProvider } from './src/components/ui/Toast';
+import { SignInScreen } from './src/screens/SignInScreen';
 import { colors } from './src/theme';
 
 const queryClient = new QueryClient({
@@ -46,7 +47,7 @@ function LanguageSync() {
 }
 
 function Gate() {
-  const { isReady, error, retry } = useAuth();
+  const { isReady, user } = useAuth();
   const { t } = useLanguage();
   useAppFocus();
   // Design typeface. If loading fails (fontError) we continue with the system
@@ -66,12 +67,8 @@ function Gate() {
       </View>
     );
   }
-  if (error) {
-    return (
-      <View style={styles.fill}>
-        <ErrorState title={t('error_title')} message={error} hint={t('offline_hint')} retryLabel={t('retry')} onRetry={retry} />
-      </View>
-    );
+  if (!user) {
+    return <SignInScreen />;
   }
   return <RootNavigator />;
 }

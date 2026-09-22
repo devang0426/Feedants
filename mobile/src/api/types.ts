@@ -154,8 +154,31 @@ export interface CompetitionSummary {
   currency: string;
   capacity: Capacity;
   registrationClosesAt: string;
+  submissionEndsAt: string;
+  resultAt: string;
   judgeName: string | null;
   judgeAvatarUrl: string | null;
+}
+
+export interface ListFilters {
+  q?: string;
+  category?: string;
+  phase?: Phase;
+}
+
+export interface Category {
+  key: string;
+  label: string;
+}
+
+export interface MyRegistration {
+  id: string;
+  status: RegistrationStatus;
+  isActive: boolean;
+  confirmedAt: string | null;
+  expiresAt: string | null;
+  amountPaidPaise: number;
+  competition: CompetitionSummary;
 }
 
 export interface User {

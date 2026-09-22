@@ -1,8 +1,31 @@
 import { request } from './client';
-import type { CompetitionDetails, CompetitionSummary, MutationResult, User } from './types';
+import type {
+  Category,
+  CompetitionDetails,
+  CompetitionSummary,
+  ListFilters,
+  MutationResult,
+  MyRegistration,
+  User,
+} from './types';
+
+const toQuery = (filters: ListFilters = {}) => {
+  const params = new URLSearchParams();
+  if (filters.q) params.set('q', filters.q);
+  if (filters.category) params.set('category', filters.category);
+  if (filters.phase) params.set('phase', filters.phase);
+  const s = params.toString();
+  return s ? `?${s}` : '';
+};
 
 export const competitionsApi = {
-  list: () => request<{ competitions: CompetitionSummary[] }>('/competitions').then((d) => d.competitions),
+  list: (filters?: ListFilters) =>
+    request<{ competitions: CompetitionSummary[] }>(`/competitions${toQuery(filters)}`).then((d) => d.competitions),
+
+  categories: () => request<{ categories: Category[] }>('/competitions/categories').then((d) => d.categories),
+
+  myRegistrations: () =>
+    request<{ registrations: MyRegistration[] }>('/me/registrations').then((d) => d.registrations),
 
   details: (idOrSlug: string, signal?: AbortSignal) =>
     request<{ competition: CompetitionDetails }>(`/competitions/${idOrSlug}`, { signal }).then(

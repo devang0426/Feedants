@@ -7,7 +7,7 @@ import { Text } from '../components/ui/Text';
 import { DetailsSkeleton } from '../components/ui/Skeleton';
 import { useToast } from '../components/ui/Toast';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import type { RootStackParamList } from '../navigation/types';
+import { TAB_ROUTE, type RootStackParamList } from '../navigation/types';
 import { useCompetitionActions, useCompetitionDetails } from '../hooks/useCompetition';
 import { useServerNow } from '../hooks/useCountdown';
 import { useLanguage } from '../i18n';
@@ -181,7 +181,10 @@ export function CompetitionDetailsScreen({ route, navigation }: Props) {
   );
 
   const goBack = useMemo(
-    () => (navigation.canGoBack() ? () => navigation.goBack() : () => navigation.navigate('CompetitionsList')),
+    () =>
+      navigation.canGoBack()
+        ? () => navigation.goBack()
+        : () => navigation.navigate('MainTabs', { screen: 'Competitions' }),
     [navigation]
   );
 
@@ -249,9 +252,7 @@ export function CompetitionDetailsScreen({ route, navigation }: Props) {
       <BottomTabBar
         active="competitions"
         avatarUrl={user?.avatarUrl}
-        onPress={(tab) => {
-          if (tab === 'competitions') navigation.navigate('CompetitionsList');
-        }}
+        onPress={(tab) => navigation.navigate('MainTabs', { screen: TAB_ROUTE[tab] })}
       />
 
       <PaymentSheet
